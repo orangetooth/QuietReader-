@@ -1,5 +1,7 @@
+// src/menu/contextMenu.js
 const { ipcMain, Menu, app, dialog } = require('electron');
 const { openFile } = require('../utils/fileUtils');
+const { createFontSubmenu } = require('../utils/fontSettings');
 
 function createContextMenu(mainWindow) {
     const template = [
@@ -8,9 +10,14 @@ function createContextMenu(mainWindow) {
             click: async () => {
                 const content = await openFile(mainWindow);
                 if (content) {
-                    mainWindow.webContents.executeJavaScript(`document.getElementById('novel-content').value = \`${content}\``);
+                    const escapedContent = JSON.stringify(content);
+                    mainWindow.webContents.executeJavaScript(`document.getElementById('novel-content').value = ${escapedContent};`);
                 }
             }
+        },
+        {
+            label: '文字调整',
+            submenu: createFontSubmenu(mainWindow)
         },
         {
             label: '退出',
