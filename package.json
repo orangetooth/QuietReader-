@@ -1,0 +1,14 @@
+{
+  "name": "novel-reader",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "AI",
+  "license": "ISC",
+  "description": "A novel reader for fishing at work",
+  "devDependencies": {
+    "electron": "^31.4.0"
+  }
+}
