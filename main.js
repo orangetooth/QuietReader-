@@ -1,24 +1,31 @@
 const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
 const fs = require('fs');
 const path = require('path');
-const { openFile } = require('./src/utils/fileUtils');
 const contextMenu = require('./src/menu/contextMenu');
 
-const WINDOW_WIDTH = 800;
-const WINDOW_HEIGHT = 600;
-
+let windowWidth = 800;
+let windowHeight = 600;
 let win;
+let isDragging = false;
 
 function createWindow() {
     win = new BrowserWindow({
-        width: WINDOW_WIDTH,
-        height: WINDOW_HEIGHT,
+        width: windowWidth,
+        height: windowHeight,
         frame: false,
-        transparent: true,
+        // transparent: true,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
         },
+    });
+
+    win.on('resize', () => {
+        if (!isDragging) {
+            const [width, height] = win.getSize();
+            windowWidth = width;
+            windowHeight = height;
+        }
     });
 
     win.loadFile('index.html');
@@ -42,15 +49,19 @@ app.on('activate', () => {
 });
 
 ipcMain.on('window-drag', (event, { screenX, screenY, offsetX, offsetY }) => {
+    isDragging = true;
+
     if (win) {
         const logicalX = screenX - offsetX;
         const logicalY = screenY - offsetY;
 
         win.setBounds({
-            width: WINDOW_WIDTH,
-            height: WINDOW_HEIGHT,
+            width: windowWidth,
+            height: windowHeight,
             x: logicalX,
             y: logicalY
         });
     }
+
+    isDragging = false;
 });
