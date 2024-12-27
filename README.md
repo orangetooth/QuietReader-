@@ -28,7 +28,7 @@
 1. **克隆仓库**
 
     ```bash
-    git clone <你的仓库地址>
+    git clone <https://github.com/orangetooth/QuietReader>
     cd novel-reader
     ```
 
@@ -58,22 +58,6 @@
 4. **滚动阅读**:  使用鼠标滚轮向上或向下滚动来阅读小说内容。
 5. **退出应用**:  点击右键，选择 "退出" 来关闭应用程序。
 
-## 项目结构
-
-novel-reader/
-├── package.json
-├── src/
-│ ├── main/
-│ │ ├── dialog.js # 文件打开对话框相关逻辑
-│ │ ├── index.js # 主进程入口文件
-│ │ └── menu.js # 应用程序菜单和上下文菜单逻辑
-│ └── renderer/
-│ └── reader/
-│ ├── index.html # 渲染进程 HTML 文件
-│ ├── index.js # 渲染进程 JavaScript 文件
-│ └── style.css # 渲染进程 CSS 样式表
-└── README.md
-
 ## 技术栈
 
 *   [Electron](https://www.electronjs.org/): 用于构建跨平台桌面应用
@@ -84,6 +68,3 @@ novel-reader/
 
 欢迎提交 issue 和 pull request，一起改进这个项目！
 
-## 许可证
-
-[ISC](LICENSE)  <!-- 如果您创建了 LICENSE 文件 -->

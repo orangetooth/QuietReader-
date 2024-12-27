@@ -6,7 +6,7 @@
     "start": "electron ."
   },
   "author": "AI",
-  "license": "ISC",
+  "license": "MIT",
   "description": "A novel reader for fishing at work",
   "devDependencies": {
     "electron": "^31.4.0"
