@@ -1,7 +1,6 @@
-const { app, BrowserWindow, ipcMain, dialog, Menu } = require('electron');
-const fs = require('fs');
+const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const path = require('path');
-const contextMenu = require('./src/menu/contextMenu');
+const { createContextMenu } = require('./menu');
 
 let windowWidth = 800;
 let windowHeight = 600;
@@ -13,10 +12,10 @@ function createWindow() {
         width: windowWidth,
         height: windowHeight,
         frame: false,
-        // transparent: true,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
+            preload: path.join(__dirname, '../preload.js') // Consider adding a preload script
         },
     });
 
@@ -28,13 +27,11 @@ function createWindow() {
         }
     });
 
-    win.loadFile('index.html');
+    win.loadFile(path.join(__dirname, '../renderer/reader/index.html'));
+    createContextMenu(win);
 }
 
-app.whenReady().then(() => {
-    createWindow();
-    contextMenu.createContextMenu(win); // 创建右键菜单
-});
+app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
@@ -50,18 +47,13 @@ app.on('activate', () => {
 
 ipcMain.on('window-drag', (event, { screenX, screenY, offsetX, offsetY }) => {
     isDragging = true;
-
     if (win) {
-        const logicalX = screenX - offsetX;
-        const logicalY = screenY - offsetY;
-
         win.setBounds({
             width: windowWidth,
             height: windowHeight,
-            x: logicalX,
-            y: logicalY
+            x: screenX - offsetX,
+            y: screenY - offsetY
         });
     }
-
     isDragging = false;
 });

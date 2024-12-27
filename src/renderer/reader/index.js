@@ -1,6 +1,8 @@
+// src/renderer/reader/index.js
 const { ipcRenderer } = require('electron');
 
 const overlay = document.querySelector('#overlay');
+const textarea = document.getElementById('novel-content');
 let isDragging = false;
 let offsetX, offsetY;
 
@@ -26,17 +28,30 @@ overlay.addEventListener('mouseup', () => {
 });
 
 overlay.addEventListener('wheel', (e) => {
-    // 阻止默认行为
     e.preventDefault();
-
-    // 获取 textarea 元素
-    const textarea = document.getElementById('novel-content');
-
-    // 将滚动事件传递给 textarea
     textarea.scrollTop += e.deltaY;
 }, { passive: false });
 
 overlay.addEventListener('contextmenu', (e) => {
     e.preventDefault();
     ipcRenderer.send('show-context-menu');
+});
+
+ipcRenderer.on('apply-text-settings', (event, settings) => {
+    if (settings.fontSize) {
+        textarea.style.fontSize = settings.fontSize;
+    }
+    if (settings.fontColor) {
+        textarea.style.color = settings.fontColor;
+    }
+    if (settings.lineHeight) {
+        textarea.style.lineHeight = settings.lineHeight;
+    }
+    if (settings.letterSpacing) {
+        textarea.style.letterSpacing = settings.letterSpacing;
+    }
+});
+
+ipcRenderer.on('set-novel-content', (event, content) => {
+    textarea.value = content;
 });
